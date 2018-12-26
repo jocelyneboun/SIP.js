@@ -1,17 +1,26 @@
-import { EventEmitter } from "events";
+import { C } from "./constants";
+import { ClientContext } from "./client-context";
+import { IncomingRequest, IncomingResponse } from "./sip-message";
+import { UA } from "./ua";
+import { URI } from "./uri";
 
-export interface Notification {
+import { TypeStrings } from "./enums";
+
+export declare interface Notification {
   request: any;
 }
-
 /**
   * The Subscription interface SIP.js is providing.
   */
-export class Subscription extends EventEmitter {
+ export declare class Subscription extends ClientContext {
+  constructor(ua: UA, target: string | URI, event: string, options: any);
 
+  subscribe(): Subscription;
   refresh(): void;
+  receiveResponse(response: IncomingResponse): void;
   unsubscribe(): void;
-  close(): void;
+  receiveRequest(request: IncomingRequest): void;
+  onDialogError(response: IncomingResponse): void
 
   on(name: 'accepted', callback: (response: any, cause: C.causes) => void): this;
   on(name: 'failed' | 'rejected', callback: (response?: any, cause?: C.causes) => void): this;
